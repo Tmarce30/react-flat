@@ -9,27 +9,39 @@ class App extends Component {
 
     this.state = {
       flats: flats,
+      selectedFlat: flats[0]
     }
   }
 
-  static defaultProps = {
-    center: {
-      lat: 59.95,
-      lng: 30.33
-    },
-    zoom: 11
-  };
+  center() {
+    return {
+      lat: this.state.selectedFlat.lat,
+      lng: this.state.selectedFlat.lng
+    };
+  }
+
+  selectFlat(index) {
+    this.setState.selectedFlat({selectedFlat: flats[index]})
+  }
 
   render() {
     return (
       <div>
-        <FlatList flats={this.state.flats} />
+        <FlatList
+          flats={this.state.flats}
+          selectedFlat={this.state.selectedFlat}
+          selectFlat={this.selectFlat}/>
         <div className='map-container'>
           <GoogleMapReact
             bootstrapURLKeys={{ key: process.env.MAP_API_KEY }}
-            defaultCenter={this.props.center}
-            defaultZoom={this.props.zoom}
+            defaultCenter={this.center()}
+            defaultZoom={13}
           >
+            <div
+              className='marker'
+              lat={this.state.selectedFlat.lat}
+              lng={this.state.selectedFlat.lng}
+            ></div>
           </GoogleMapReact>
         </div>
       </div>
